@@ -1,0 +1,45 @@
+<script>
+let  url01  =  "http://api.unclealan.cn:4100/movie/top";//排行榜
+let  url02  =  "http://api.unclealan.cn:4100/movie/subject/";//电影详情
+let  url03  =  "http://api.unclealan.cn:4100/movie/celebrity/";//电影人详情
+
+let  message  =  "排行榜第一的电影是";
+
+let  xhr01  =  new  XMLHttpRequest();
+xhr01.onload  =  function(){
+        let  resObj  =  JSON.parse(xhl01.responseText);
+        let  id  =  resObj.subjects[0].id;
+        message  +=  " "  +  resObj.subjects[0].title;  
+
+        let  xhr02  =  new  XMLHttpRequest();
+        xhr02.onload  =  function(){
+                let  resObj  =  JSON.parse(xhr02.responseText);
+                let  id  =  resObj.directors[0].id;
+                message  +=  "导演是"  +  resObj.directors[0].name;
+                
+                let  xhr03  =  new  XMLHttpRequest();
+                xhr03.onload  =  function(){
+                        let  resObs  =  JSON.parse(xhr03.responseText);
+                        message  +=  "他的老家"  +  resObj.born_place;
+
+                        document.querySelrctor('#box').innerHTML  =  message;
+                }
+                xhr03.onerror  =  function(){
+                        console.log("获取电影人信息失败");  
+                }
+                xhr03.open("GET",url03+id);
+                xhr03.send();        
+        }
+        xhr02.onerror  =  function(){
+                console.log("请求电影详情失败");
+        }  
+        xhr02.open("GET",url02+id);
+        xhr02.send();          
+        
+}
+xhr01.onerror  =  function(){
+        console.log("请求电影排行榜失败");
+}
+xhr01.open("GET",url01)
+xhr01.send();
+</script>

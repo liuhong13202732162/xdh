@@ -1,0 +1,31 @@
+<script>
+function get(url) {
+    // 返回一个Promise对象
+    return new Promise(function (resolve, reject) {
+        // 创建一个XHR对象
+        var req = new XMLHttpRequest() || new ActiveXObject('Microsoft.XMLHTTP')
+        req.open('GET', url, true)
+        // 使用req.onload监听req的状态
+        req.onload = function () {
+            if (req.readyState == 4 && req.status == 200) {
+                resolve(req.response)
+            } else {
+                reject(Error(req.statusText))
+            }
+        }
+
+        // 网络错误
+        req.onerror = function () {
+            reject(Error("Network Error"));
+        };
+
+        // 发送请求
+        req.send();
+    });
+}
+get("http://something").then(function (response) {
+    console.log(response);
+}).catch(function (error) {
+    console.log(error);
+})
+</script>
